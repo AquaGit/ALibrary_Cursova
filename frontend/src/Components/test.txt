@@ -1,0 +1,55 @@
+import React from 'react';
+import axios from 'axios';
+import Card from "react-bootstrap/Card";
+import Button from "react-bootstrap/Button";
+import Container from "react-bootstrap/Container";
+
+
+
+export default class Books extends React.Component {
+  state = {
+    books: []
+  }
+
+  componentDidMount() {
+    axios.get(`http://localhost:8000/api/books/?format=json`)
+      .then(res => {
+        const books = res.data;
+        this.setState({ books });
+      })
+  }
+
+  render() {
+    return (
+      <ul>
+        {
+          this.state.books
+            .map(book =>
+              <Container key={book.id} >
+                <div class="row row-cols-3">
+                  <div class="col mb-4">
+                    <Card style={{ width: '18rem' }}  >
+                      <Card.Img variant="top" src={book.photo} />
+                      <Card.Body>
+                        <Card.Title>
+                          Назва: {book.title}
+                        </Card.Title>
+                        <Card.Text>
+                          Категорія: {book.category}
+                        </Card.Text>
+                        <Card.Text>
+                          Автор: {book.author}
+                        </Card.Text>
+                        <Button variant="primary">More</Button>
+                      </Card.Body>
+                    </Card>
+                  </div>
+                </div>
+              </Container>
+            )
+        }
+      </ul>
+    )
+  }
+}
+
